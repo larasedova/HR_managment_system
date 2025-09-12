@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сотрудники - Система управления персоналом</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Система управления персоналом</h1>
+        </header>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="search-section">
+            <form method="GET" action="{{ url_for('main_bp.index') }}">
+                <input type="text" name="search" placeholder="Поиск по ФИО..." value="{{ search_query }}">
+                <button type="submit">Найти</button>
+                {% if search_query %}
+                    <a href="{{ url_for('main_bp.index') }}">Сбросить</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="employees-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="{{ url_for('main_bp.index', sort_by='id', order='asc' if sort_by != 'id' or order == 'desc' else 'desc', search=search_query) }}">
+                                ID {% if sort_by == 'id' %}{{ '↑' if order == 'asc' else '↓' }}{% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('main_bp.index', sort_by='last_name', order='asc' if sort_by != 'last_name' or order == 'desc' else 'desc', search=search_query) }}">
+                                ФИО {% if sort_by == 'last_name' %}{{ '↑' if order == 'asc' else '↓' }}{% endif %}
+                            </a>
+                        </th>
+                        <th>Должность</th>
+                        <th>
+                            <a href="{{ url_for('main_bp.index', sort_by='hire_date', order='asc' if sort_by != 'hire_date' or order == 'desc' else 'desc', search=search_query) }}">
+                                Дата приема {% if sort_by == 'hire_date' %}{{ '↑' if order == 'asc' else '↓' }}{% endif %}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('main_bp.index', sort_by='salary', order='asc' if sort_by != 'salary' or order == 'desc' else 'desc', search=search_query) }}">
+                                Зарплата {% if sort_by == 'salary' %}{{ '↑' if order == 'asc' else '↓' }}{% endif %}
+                            </a>
+                        </th>
+                        <th>Начальник</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if employees and employees.items %}
+                        {% for employee in employees.items %}
+                        <tr>
+                            <td>{{ employee.id }}</td>
+                            <td>{{ employee.full_name }}</td>
+                            <td>{{ employee.position.title if employee.position else 'Не указана' }}</td>
+                            <td>{{ employee.hire_date.strftime('%d.%m.%Y') }}</td>
+                            <td>{{ "{:,.2f}".format(employee.salary) }}</td>
+                            <td>{{ employee.manager_name }}</td>
+                            <td>
+                                <a href="{{ url_for('main_bp.update_manager', employee_id=employee.id) }}">
+                                    Изменить начальника
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="7">Сотрудники не найдены</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if employees and employees.pages > 1 %}
+        <div class="pagination">
+            {% if employees.has_prev %}
+                <a href="{{ url_for('main_bp.index', page=employees.prev_num, sort_by=sort_by, order=order, search=search_query) }}">← Назад</a>
+            {% endif %}
+
+            <span>Страница {{ employees.page }} из {{ employees.pages }}</span>
+
+            {% if employees.has_next %}
+                <a href="{{ url_for('main_bp.index', page=employees.next_num, sort_by=sort_by, order=order, search=search_query) }}">Вперед →</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изменение начальника - {{ employee.full_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Система управления персоналом</h1>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="form-container">
+            <h2>Изменение начальника для: {{ employee.full_name }}</h2>
+            <p>Текущая должность: {{ employee.position.title if employee.position else 'Не указана' }}</p>
+            <p>Текущий начальник: {{ employee.manager.full_name if employee.manager else 'Нет начальника' }}</p>
+
+            <form method="POST" action="{{ url_for('main_bp.update_manager', employee_id=employee.id) }}">
+                <div class="form-group">
+                    <label for="manager_id">Выберите нового начальника:</label>
+                    <select name="manager_id" id="manager_id" required>
+                        <option value="">-- Нет начальника --</option>
+                        {% for emp in all_employees %}
+                            <option value="{{ emp.id }}"
+                                    {% if emp.id == employee.manager_id %}selected{% endif %}
+                                    {% if emp.id == employee.id %}disabled{% endif %}>
+                                {{ emp.full_name }}
+                                ({{ emp.position.title if emp.position else 'Без должности' }})
+                                {% if emp.id == employee.id %} - нельзя выбрать себя {% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-save">Сохранить изменения</button>
+                    <a href="{{ url_for('main_bp.index') }}" class="btn-cancel">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
