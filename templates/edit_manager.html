@@ -51,5 +51,44 @@
             </form>
         </div>
     </div>
+
+<script>
+console.log('Edit manager page loaded');
+
+// Проверяем, загружены ли все элементы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded');
+
+    const form = document.querySelector('form');
+    const select = document.getElementById('manager_id');
+    const saveButton = document.querySelector('.btn-save');
+    const cancelButton = document.querySelector('.btn-cancel');
+
+    console.log('Form found:', form);
+    console.log('Select found:', select);
+    console.log('Save button found:', saveButton);
+    console.log('Cancel button found:', cancelButton);
+
+    // Добавляем обработчики для отладки
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('Form submitted');
+            console.log('Selected manager:', select.value);
+        });
+    }
+
+    if (saveButton) {
+        saveButton.addEventListener('click', function() {
+            console.log('Save button clicked');
+        });
+    }
+
+    if (cancelButton) {
+        cancelButton.addEventListener('click', function() {
+            console.log('Cancel button clicked');
+        });
+    }
+});
+</script>
 </body>
 </html>

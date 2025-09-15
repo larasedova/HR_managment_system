@@ -12,8 +12,8 @@ class Position(db.Model):
     title = db.Column(db.String(100), nullable=False)
     level = db.Column(db.String(50), nullable=False)
 
-    # Связь с сотрудниками - исправлено
-    employees = db.relationship('Employee', backref='position_rel', lazy=True)
+    # Упрощаем связь - оставляем только одну
+    employees = db.relationship('Employee', backref='position', lazy=True)
 
     def __repr__(self):
         return f'<Position {self.title}>'
@@ -37,14 +37,10 @@ class Employee(db.Model):
     # Внешний ключ для начальника (самоссылающаяся связь)
     manager_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=True)
 
-    # Связи - исправлено для избежания конфликтов
-    position = db.relationship('Position', backref='employee_positions', foreign_keys=[position_id])
-
-    # Связь для подчиненных
+    # Связь для подчиненных (упрощаем)
     subordinates = db.relationship(
         'Employee',
         backref=db.backref('manager', remote_side=[id]),
-        foreign_keys=[manager_id],
         lazy=True
     )
 

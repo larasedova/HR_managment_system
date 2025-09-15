@@ -72,56 +72,72 @@ def update_manager(employee_id):
     try:
         employee = Employee.query.get_or_404(employee_id)
         print(f"DEBUG: Employee found: {employee.full_name}")
+        print(f"DEBUG: Current manager: {employee.manager_id}")
 
         if request.method == 'POST':
-            print(f"DEBUG: POST data: {request.form}")
+            print(f"DEBUG: POST data: {dict(request.form)}")
 
             # Получаем ID нового начальника из формы
             new_manager_id = request.form.get('manager_id')
-
-            print(f"Updating manager for employee {employee_id} to {new_manager_id}")
+            print(f"DEBUG: New manager ID from form: '{new_manager_id}' (type: {type(new_manager_id)})")
 
             # Проверяем, не пустое ли значение
-            if new_manager_id == '':
+            if new_manager_id == '' or new_manager_id is None:
                 new_manager_id = None
-            elif new_manager_id:
-                new_manager_id = int(new_manager_id)
+                print("DEBUG: Setting manager to None")
+            else:
+                try:
+                    new_manager_id = int(new_manager_id)
+                    print(f"DEBUG: Converted to int: {new_manager_id}")
 
-                # Проверка: нельзя назначить себя своим начальником
-                if new_manager_id == employee.id:
-                    flash('Сотрудник не может быть своим начальником', 'error')
+                    # Проверка: нельзя назначить себя своим начальником
+                    if new_manager_id == employee.id:
+                        flash('Сотрудник не может быть своим начальником', 'error')
+                        return redirect(url_for('main_bp.update_manager', employee_id=employee_id))
+
+                    # Проверка на циклические ссылки
+                    current_manager = Employee.query.get(new_manager_id)
+                    if current_manager:
+                        print(f"DEBUG: New manager found: {current_manager.full_name}")
+                        # Проверяем всю цепочку начальников на цикличность
+                        checked_managers = set()
+                        temp_manager = current_manager
+                        while temp_manager and temp_manager.manager_id:
+                            if temp_manager.manager_id == employee.id:
+                                flash('Обнаружена циклическая ссылка в иерархии', 'error')
+                                return redirect(url_for('main_bp.update_manager', employee_id=employee_id))
+                            if temp_manager.id in checked_managers:
+                                break  # Предотвращаем бесконечный цикл
+                            checked_managers.add(temp_manager.id)
+                            temp_manager = Employee.query.get(temp_manager.manager_id)
+                    else:
+                        print(f"DEBUG: Manager with ID {new_manager_id} not found!")
+                        flash('Указанный начальник не найден', 'error')
+                        return redirect(url_for('main_bp.update_manager', employee_id=employee_id))
+
+                except ValueError:
+                    print("DEBUG: ValueError when converting manager_id to int")
+                    flash('Некорректный ID начальника', 'error')
                     return redirect(url_for('main_bp.update_manager', employee_id=employee_id))
 
-                # Проверка на циклические ссылки
-                current_manager = Employee.query.get(new_manager_id)
-                if current_manager:
-                    # Проверяем всю цепочку начальников на цикличность
-                    checked_managers = set()
-                    temp_manager = current_manager
-                    while temp_manager and temp_manager.manager_id:
-                        if temp_manager.manager_id == employee.id:
-                            flash('Обнаружена циклическая ссылка в иерархии', 'error')
-                            return redirect(url_for('main_bp.update_manager', employee_id=employee_id))
-                        if temp_manager.id in checked_managers:
-                            break  # Предотвращаем бесконечный цикл
-                        checked_managers.add(temp_manager.id)
-                        temp_manager = Employee.query.get(temp_manager.manager_id)
-
             # Обновляем начальника
+            print(f"DEBUG: Setting manager_id from {employee.manager_id} to {new_manager_id}")
             employee.manager_id = new_manager_id
 
             try:
                 db.session.commit()
+                print("DEBUG: Database commit successful")
                 flash('Начальник успешно обновлен', 'success')
                 return redirect(url_for('main_bp.index'))
             except Exception as db_error:
                 db.session.rollback()
+                print(f"DEBUG: Database error: {str(db_error)}")
                 flash(f'Ошибка базы данных: {str(db_error)}', 'error')
                 return redirect(url_for('main_bp.update_manager', employee_id=employee_id))
 
         # GET запрос - показать форму
-        # Исключаем текущего сотрудника из списка возможных начальников
         all_employees = Employee.query.filter(Employee.id != employee_id).all()
+        print(f"DEBUG: Found {len(all_employees)} possible managers")
 
         return render_template('edit_manager.html',
                                employee=employee,
@@ -129,6 +145,7 @@ def update_manager(employee_id):
 
     except Exception as e:
         db.session.rollback()
+        print(f"DEBUG: General error: {str(e)}")
         flash(f'Ошибка при обновлении начальника: {str(e)}', 'error')
         return redirect(url_for('main_bp.index'))
 
