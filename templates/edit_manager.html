@@ -10,7 +10,7 @@
     <form method="POST" action="{{ url_for('main_bp.update_manager', employee_id=employee.id) }}">
         <div class="form-group">
             <label for="manager_id">Выберите нового начальника:</label>
-            <select name="manager_id" id="manager_id" required>
+            <select name="manager_id" id="manager_id">
                 <option value="">-- Нет начальника --</option>
                 {% for emp in all_employees %}
                     <option value="{{ emp.id }}"
@@ -46,10 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Save button:', saveButton);
     console.log('Cancel button:', cancelButton);
 
+    // Проверка отправки формы
     if (form) {
         form.addEventListener('submit', function(e) {
             console.log('Form submitted');
             console.log('Selected manager ID:', select.value);
+            // Не мешаем отправке
         });
     }
 });
