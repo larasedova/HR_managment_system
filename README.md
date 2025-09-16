@@ -18,7 +18,7 @@
 - **Драйвер БД**: psycopg2-binary
 
 ## Структура проекта
-'''
+```
 employee_catalog/
 ├── app/
 │ ├── init.py # Инициализация приложения
@@ -34,7 +34,7 @@ employee_catalog/
 ├── requirements.txt # Зависимости
 ├── run.py # Точка входа
 └── README.md # Документация
-'''
+```
 
 ## Установка и запуск
 
