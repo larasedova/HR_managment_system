@@ -42,15 +42,15 @@ employee_catalog/
    
    git clone <repository-url>
    cd employee_catalog
+   
 Создание виртуального окружения
-
 
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 # или
 venv\Scripts\activate     # Windows
-Установка зависимостей
 
+Установка зависимостей
 
 pip install -r requirements.txt
 Настройка базы данных
@@ -58,7 +58,6 @@ pip install -r requirements.txt
 Создайте базу данных PostgreSQL hr_database
 
 Настройте подключение в файле .env:
-
 
 DATABASE_URL=postgresql://postgres:12345678@localhost:5432/hr_database
 SECRET_KEY=your-secret-key
