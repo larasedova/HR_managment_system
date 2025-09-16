@@ -1,3 +1,10 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -15,12 +22,14 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Header */
 header h1 {
     color: #333;
     text-align: center;
     margin-bottom: 30px;
 }
 
+/* Search section */
 .search-section {
     margin-bottom: 20px;
     padding: 15px;
@@ -66,6 +75,7 @@ header h1 {
     background: #545b62;
 }
 
+/* Table styles */
 .employees-table {
     overflow-x: auto;
     margin-bottom: 20px;
@@ -86,8 +96,6 @@ th, td {
 th {
     background-color: #f8f9fa;
     font-weight: bold;
-    position: sticky;
-    top: 0;
 }
 
 th a {
@@ -104,6 +112,7 @@ tr:hover {
     background-color: #f8f9fa;
 }
 
+/* Pagination */
 .pagination {
     text-align: center;
     margin-top: 20px;
@@ -131,6 +140,7 @@ tr:hover {
     color: #333;
 }
 
+/* Messages */
 .messages {
     margin-bottom: 20px;
 }
@@ -154,62 +164,117 @@ tr:hover {
     border-color: #f5c6cb;
 }
 
-.form-group {
+/* FORM CONTAINER - ВАЖНО: исправленные стили */
+.form-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+    color: #2c3e50;
     margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-container p {
+    margin: 15px 0;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+}
+
+/* Form elements */
+.form-group {
+    margin: 25px 0;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: bold;
-    color: #333;
+    color: #2c3e50;
+    font-size: 16px;
 }
 
 .form-group select {
     width: 100%;
-    max-width: 400px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: white;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    background: white;
+    cursor: pointer;
 }
 
 .form-group select:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-button {
-    padding: 10px 20px;
-    background: #28a745;
+/* BUTTONS - ВАЖНО: исправленные стили кнопок */
+.form-buttons {
+    margin-top: 30px;
+    text-align: center;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Стили для кнопки сохранить */
+button.btn-save {
+    padding: 15px 30px;
+    background: #27ae60;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 14px;
-    margin-right: 10px;
-}
-
-button:hover {
-    background: #218838;
-}
-
-a.button {
-    padding: 10px 20px;
-    background: #6c757d;
-    color: white;
     text-decoration: none;
-    border-radius: 4px;
-    font-size: 14px;
     display: inline-block;
 }
 
-a.button:hover {
-    background: #545b62;
+button.btn-save:hover {
+    background: #219a52;
 }
 
+/* Стили для кнопки отмены */
+a.btn-cancel {
+    padding: 15px 30px;
+    background: #95a5a6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+a.btn-cancel:hover {
+    background: #7f8c8d;
+}
+
+/* Select options */
+option {
+    padding: 8px;
+    font-size: 14px;
+}
+
+option:disabled {
+    color: #999;
+    background-color: #f8f9fa;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .container {
         padding: 15px;
@@ -237,80 +302,13 @@ a.button:hover {
         flex-direction: column;
         gap: 10px;
     }
-}
 
-.form-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-}
+    .form-buttons {
+        flex-direction: column;
+    }
 
-.form-container h2 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.form-container p {
-    margin-bottom: 15px;
-    padding: 10px;
-    background: white;
-    border-radius: 4px;
-    border-left: 4px solid #007bff;
-}
-
-.form-buttons {
-    margin-top: 25px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.btn-save {
-    padding: 12px 24px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.btn-save:hover {
-    background: #218838;
-}
-
-.btn-cancel {
-    padding: 12px 24px;
-    background: #6c757d;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-.btn-cancel:hover {
-    background: #545b62;
-}
-
-/* Стили для выпадающего списка */
-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background: white;
-}
-
-select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-option:disabled {
-    color: #999;
-    background-color: #f8f9fa;
+    .form-container {
+        margin: 10px;
+        padding: 20px;
+    }
 }
