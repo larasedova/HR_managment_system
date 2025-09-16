@@ -21,55 +21,56 @@
 ```
 employee_catalog/
 ├── app/
-│ ├── init.py # Инициализация приложения
-│ ├── models.py # Модели данных (Employee, Position)
-│ ├── routes.py # Маршруты и обработчики
-│ └── config.py # Конфигурация приложения
+│ ├── init.py             # Инициализация приложения
+│ ├── models.py           # Модели данных (Employee, Position)
+│ ├── routes.py           # Маршруты и обработчики
+│ └── config.py           # Конфигурация приложения
 ├── templates/
-│ ├── base.html # Базовый шаблон
-│ ├── employees.html # Список сотрудников
-│ └── edit_manager.html # Форма изменения начальника
+│ ├── base.html           # Базовый шаблон
+│ ├── employees.html      # Список сотрудников
+│ └── edit_manager.html   # Форма изменения начальника
 ├── static/
-│ └── style.css # Стили приложения
-├── requirements.txt # Зависимости
-├── run.py # Точка входа
-└── README.md # Документация
+│ └── style.css           # Стили приложения
+├── requirements.txt      # Зависимости
+├── run.py                # Точка входа
+└── README.md             # Документация
 ```
 
 ## Установка и запуск
 
 1. **Клонирование репозитория**
-   
+```   
    git clone <repository-url>
    cd employee_catalog
-   
+```   
 Создание виртуального окружения
-
+```
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 # или
 venv\Scripts\activate     # Windows
-
+```
 Установка зависимостей
-
+```
 pip install -r requirements.txt
+```
 Настройка базы данных
 
 Создайте базу данных PostgreSQL hr_database
 
 Настройте подключение в файле .env:
-
+```
 DATABASE_URL=postgresql://postgres:12345678@localhost:5432/hr_database
 SECRET_KEY=your-secret-key
+```
 Запуск приложения
-
-
+```
 python run.py
+```
 Открытие в браузере
-
-
+```
 http://localhost:5000
-
+```
 Модели данных
 
 Таблица employees:
